@@ -59,64 +59,78 @@ const posts = [
 const containerEl = document.getElementById('container')
 
 
-posts.forEach((val) => {
+
+
+posts.forEach((val) =>{
+    val['like_condition'] = false
     let media = val.media
     let name = val.author.name
     let time = val.created
     let text = val.content
-    let image
+    let id = Number(val.id)
+    console.log(id);
+    let image 
     if (val.author.image == null) {
-        image = img_Presolder(name)
-
-    } else {
+        image = img_Presolder(val.author.name)
+        
+    }else{
         image = `<img class="profile-pic" src="${val.author.image}" alt="Phil Mangione">`
-
-    }
+        
+    }    
     let positionPost = val.id
+    
     let numberOfLike = val.likes
-    let pushLike = false
-    console.log(media, name, time, text, image, positionPost, numberOfLike);
-    containerEl.insertAdjacentElement('beforeend', generated_post(image, name, time, text, media, positionPost, numberOfLike))
-    const like_button = document.querySelector(like - button)
-    like_button.addEventListener('click', function () {
-        if (!pushLike) {
-            numberOfLike++
-            pushLike = true
+    console.log(media,name,time,text,image,positionPost,numberOfLike);
+    containerEl.insertAdjacentElement('beforeend',generated_post(image,name,time,text,media,positionPost,numberOfLike,id))
+})        
+const like_button = document.querySelectorAll('.like-button')
+console.log(posts);
+console.log(like_button);
+for (let i = 0; i < like_button.length; i++) {
+    like_button[i].addEventListener('click',function () {
+        console.log('click');
+        console.log(posts[i].likes);
+        const containerNumber = document.getElementById(`like-counter-${posts[i].id}`)
+        console.log(containerNumber);
+        console.log(posts[i].like_condition);
+
+        if (!posts[i].like_condition) {
+            posts[i].like_condition = true
+            posts[i].likes++
+
+            console.log(posts[i].like_condition);
         }
-
-    })
-})
-
-
-
+        containerNumber.innerText = posts[i].likes
+    })      
+}
 
 //-----------------------POST-------------------------------------------------
-function generated_post(media, name, time, text, image, positionPost, numberOfLike) {
-
+function generated_post(media,name,time,text,image,positionPost,numberOfLike,id) {
+    
     const post = document.createElement('div')
     post.classList.add('post')
-    post.insertAdjacentElement('beforeend', generated_post_header(media, name, time))
-    post.insertAdjacentElement('beforeend', generated_post_text(text))
-    post.insertAdjacentElement('beforeend', generated_post_image(image))
-    post.insertAdjacentElement('beforeend', generated_post_footer(positionPost, numberOfLike))
-
-
-
+    post.insertAdjacentElement ('beforeend',generated_post_header(media,name,time))
+    post.insertAdjacentElement ('beforeend',generated_post_text(text))
+    post.insertAdjacentElement ('beforeend',generated_post_image(image))
+    post.insertAdjacentElement ('beforeend',generated_post_footer(positionPost,numberOfLike,id))
+    
+    
+    
     return post
-
+}
 //------------------------POST HEADER----------------------------------------------------------
 
-function generated_post_header(media, name, time) {
+function generated_post_header(media,name,time) {
     const post_header = document.createElement('div')
     post_header.classList.add('post__header')
-    post_header.insertAdjacentElement('beforeend', generated_post_meta(media, name, time))
+    post_header.insertAdjacentElement('beforeend',generated_post_meta(media,name,time))
     return post_header
 }
-function generated_post_meta(media, name, time) {
+function generated_post_meta(media,name,time) {
     const post_meta = document.createElement('div')
     post_meta.classList.add('post-meta')
-    post_meta.insertAdjacentElement('beforeend', generated_post_meta_icon(media))
-    post_meta.insertAdjacentElement('beforeend', generated_post_meta_data(name, time))
+    post_meta.insertAdjacentElement('beforeend',generated_post_meta_icon(media))
+    post_meta.insertAdjacentElement('beforeend',generated_post_meta_data(name,time))
     return post_meta
 }
 function generated_post_meta_icon(media) {
@@ -126,10 +140,10 @@ function generated_post_meta_icon(media) {
     post_meta_icon.innerHTML = icon
     return post_meta_icon
 }
-function generated_post_meta_data(name, time) {
+function generated_post_meta_data(name,time) {
     const post_meta_data = document.createElement('div')
     post_meta_data.classList.add('post-meta__data')
-    post_meta_data.insertAdjacentElement('beforeend', generated_post_meta_data_author(name))
+    post_meta_data.insertAdjacentElement('beforeend',generated_post_meta_data_author(name))
     post_meta_data.insertAdjacentElement('beforeend', generated_post_meta_data_author(time))
     return post_meta_data
 }
@@ -161,23 +175,23 @@ function generated_post_image(image) {
     post_image.classList.add('post__image')
     const img = document.createElement('img')
     img.src = `${image}`
-    post_image.insertAdjacentElement('beforeend', img)
-
+    post_image.insertAdjacentElement('beforeend',img)
+    
     return post_image
 }
 //---------------------------POST FOOTER------------------------------------------
-function generated_post_footer(positionPost, numberOfLike) {
+function generated_post_footer(positionPost,numberOfLike,id) {
     const post_footer = document.createElement('div')
     post_footer.classList.add('post__footer')
-    post_footer.insertAdjacentElement('beforeend', generated_likes(positionPost, numberOfLike))
+    post_footer.insertAdjacentElement('beforeend',generated_likes(positionPost,numberOfLike,id))
     return post_footer
 }
 
-function generated_likes(positionPost, numberOfLike) {
+function generated_likes(positionPost,numberOfLike,id) {
     const post_footer_likes = document.createElement('div')
-    post_footer_likes.classList.add('likes', 'js-likes')
-    post_footer_likes.insertAdjacentElement('beforeend', generated_likes_cta(positionPost))
-    post_footer_likes.insertAdjacentElement('beforeend', nagenerated_likes_counter(numberOfLike))
+    post_footer_likes.classList.add('likes','js-likes')
+    post_footer_likes.insertAdjacentElement('beforeend',generated_likes_cta(positionPost))
+    post_footer_likes.insertAdjacentElement('beforeend',nagenerated_likes_counter(numberOfLike,id))
     return post_footer_likes
 }
 
@@ -190,15 +204,15 @@ function generated_likes_cta(positionPost) {
         <span class="like-button__label">Mi Piace</span>
     </a>
     `
-
-    post_footer_likes_cta.insertAdjacentHTML('beforeend', aEl)
+    
+    post_footer_likes_cta.insertAdjacentHTML('beforeend',aEl)
     return post_footer_likes_cta
 }
 
-function nagenerated_likes_counter(numberOfLike) {
+function nagenerated_likes_counter(numberOfLike,id) {
     const post_footer_likes_counter = document.createElement('div')
     post_footer_likes_counter.classList.add('likes__counter')
-    post_footer_likes_counter.innerHTML = `Piace a <b id="like-counter-${numberOfLike}" class="js-likes-counter">${numberOfLike}</b> persone`
+    post_footer_likes_counter.innerHTML = `Piace a <b id="like-counter-${id}" class="js-likes-counter">${numberOfLike}</b> persone`
     return post_footer_likes_counter
 }
 function get_frist_letter_of_string(stringa) {
@@ -206,7 +220,7 @@ function get_frist_letter_of_string(stringa) {
 }
 function get_single_word_of_string_into_array(stringa) {
     return stringa.split(' ')
-
+    
 }
 function img_Presolder(NomeUtente) {
     const Array_of_NomeUtente = get_single_word_of_string_into_array(NomeUtente)
@@ -216,4 +230,5 @@ function img_Presolder(NomeUtente) {
     const fristletter_of_secondWord = get_frist_letter_of_string(secondWord)
     const cirleDivEl = `<div class='circle'>${fristletter_of_fristWord} ${fristletter_of_secondWord}</div>`
     return cirleDivEl
+
 }
