@@ -65,10 +65,11 @@ posts.forEach((val) =>{
     val['like_condition'] = false
     let media = val.media
     let name = val.author.name
-    let time = val.created
+   
+    let time = (rever_data(val.created))
+   console.log(time);
     let text = val.content
     let id = Number(val.id)
-    console.log(id);
     let image 
     if (val.author.image == null) {
         image = img_Presolder(val.author.name)
@@ -85,6 +86,7 @@ posts.forEach((val) =>{
 })        
 const like_button = document.querySelectorAll('.like-button')
 console.log(posts);
+let like_condition_dec = true
 console.log(like_button);
 for (let i = 0; i < like_button.length; i++) {
     like_button[i].addEventListener('click',function () {
@@ -96,11 +98,21 @@ for (let i = 0; i < like_button.length; i++) {
 
         if (!posts[i].like_condition) {
             posts[i].like_condition = true
+            like_condition_dec = true
+
             posts[i].likes++
+            containerNumber.innerText = posts[i].likes
 
             console.log(posts[i].like_condition);
-        }
-        containerNumber.innerText = posts[i].likes
+        }else if (like_condition_dec) {
+            posts[i].likes--
+                like_condition_dec = false
+                posts[i].like_condition = false
+                containerNumber.innerText = posts[i].likes
+                console.log(posts[i].like_condition);
+                
+        } 
+        console.log(posts[i].likes);
     })      
 }
 
@@ -231,4 +243,40 @@ function img_Presolder(NomeUtente) {
     const cirleDivEl = `<div class='circle'>${fristletter_of_fristWord} ${fristletter_of_secondWord}</div>`
     return cirleDivEl
 
+}
+function data_random() {
+    const anno =Math.floor(Math.random() * (2023 - 1995) ) + 1995
+    let mese =  Math.floor(Math.random() * (12 - 1) ) + 1
+
+    if(mese = 1 ||  3 ||  5 ||  7 ||  8 ||  10 ||  12){
+        const giorno = Math.floor(Math.random() * (31 - 1) ) + 1
+        const data = `${giorno}/${mese}/${anno}`
+        return data
+
+    }else if (mese = 4 || 6 || 9 || 11 ){
+        const giorno = Math.floor(Math.random() * (30 - 1) ) + 1
+        const data = `${giorno}/${mese}/${anno}`
+        return data
+
+    }else{
+        const giorno = Math.floor(Math.random() * (29 - 1) ) + 1
+        const data = `${giorno}/${mese}/${anno}`
+        return data
+
+    }
+    
+    
+}
+/**
+ * 
+ * @param {string} data 
+ */
+function rever_data(data) {
+    let arrayTime = data.split('-')
+    console.log(arrayTime);
+    let reverseArrayTime = arrayTime.reverse()
+    console.log(reverseArrayTime);
+    let deta = reverseArrayTime.join('/')
+    console.log(deta);
+    return deta
 }
