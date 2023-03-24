@@ -55,17 +55,27 @@ const posts = [
         "created": "2021-03-05"
     }
 ];
-let media = 5555555
-let name = 666666
-let time = 777777777
-let text = 888888888
-let image = 999999999
-let positionPost = 4444444444
-let numberOfLike = 3333333
-const containerEl = document.getElementById('container')
-const postGen = generated_post(media,name,time,text,image,positionPost,numberOfLike)
-containerEl.insertAdjacentElement('beforeend', postGen)
 
+const containerEl = document.getElementById('container')
+
+
+posts.forEach((val) =>{
+
+    let media = val.media
+    let name = val.author.name
+    let time = val.created
+    let text = val.content
+    let image = val.author.image
+    let positionPost = val.id
+    let numberOfLike = val.likes
+    console.log(media,name,time,text,image,positionPost,numberOfLike);
+    containerEl.insertAdjacentElement('beforeend',generated_post(media,name,time,text,image,positionPost,numberOfLike))
+})
+
+
+
+
+//-----------------------POST-------------------------------------------------
 function generated_post(media,name,time,text,image,positionPost,numberOfLike) {
 
     const post = document.createElement('div')
