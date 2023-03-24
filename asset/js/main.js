@@ -65,11 +65,18 @@ posts.forEach((val) =>{
     let name = val.author.name
     let time = val.created
     let text = val.content
-    let image = val.author.image
+    let image 
+    if (val.author.image == null) {
+        image = img_Presolder(val.author.name)
+
+    }else{
+        image = `<img class="profile-pic" src="${val.author.image}" alt="Phil Mangione">`
+
+    }
     let positionPost = val.id
     let numberOfLike = val.likes
     console.log(media,name,time,text,image,positionPost,numberOfLike);
-    containerEl.insertAdjacentElement('beforeend',generated_post(media,name,time,text,image,positionPost,numberOfLike))
+    containerEl.insertAdjacentElement('beforeend',generated_post(image,name,time,text,media,positionPost,numberOfLike))
 })
 
 
@@ -107,10 +114,8 @@ function generated_post_meta(media,name,time) {
 function generated_post_meta_icon(media) {
     const post_meta_icon = document.createElement('div')
     post_meta_icon.classList.add('post-meta__icon')
-    const icon = document.createElement('img')
-    icon.classList.add('profile-pic')
-    icon.src = `${media}`
-    post_meta_icon.insertAdjacentElement('beforeend',icon)
+    const icon = `${media}`
+    post_meta_icon.innerHTML = icon
     return post_meta_icon
 }
 function generated_post_meta_data(name,time) {
@@ -185,6 +190,23 @@ function generated_likes_cta(positionPost) {
 function nagenerated_likes_counter(numberOfLike) {
     const post_footer_likes_counter = document.createElement('div')
     post_footer_likes_counter.classList.add('likes__counter')
-    post_footer_likes_counter.innerHTML = `Piace a <b id="like-counter-1" class="js-likes-counter">${numberOfLike}</b> persone`
+    post_footer_likes_counter.innerHTML = `Piace a <b id="like-counter-${numberOfLike}" class="js-likes-counter">${numberOfLike}</b> persone`
     return post_footer_likes_counter
+}
+function get_frist_letter_of_string(stringa) {
+    return stringa[0]
+}
+function get_single_word_of_string_into_array(stringa) {
+    return stringa.split(' ')
+    
+}
+function img_Presolder(NomeUtente) {
+    const Array_of_NomeUtente = get_single_word_of_string_into_array(NomeUtente)
+    const fristWord = Array_of_NomeUtente[0]
+    const fristletter_of_fristWord = get_frist_letter_of_string(fristWord)
+    const secondWord = Array_of_NomeUtente[1]
+    const fristletter_of_secondWord = get_frist_letter_of_string(secondWord)
+    const cirleDivEl = `<div class='circle'>${fristletter_of_fristWord} ${fristletter_of_secondWord}</div>`
+    return cirleDivEl
+
 }
