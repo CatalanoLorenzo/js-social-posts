@@ -97,6 +97,7 @@ for (let i = 0; i < like_button.length; i++) {
         console.log(posts[i].like_condition);
 
         if (!posts[i].like_condition) {
+            like_button[i].classList.add('blue')
             posts[i].like_condition = true
             like_condition_dec = true
 
@@ -106,6 +107,7 @@ for (let i = 0; i < like_button.length; i++) {
             console.log(posts[i].like_condition);
         }else if (like_condition_dec) {
             posts[i].likes--
+            like_button[i].classList.remove('blue')
                 like_condition_dec = false
                 posts[i].like_condition = false
                 containerNumber.innerText = posts[i].likes
