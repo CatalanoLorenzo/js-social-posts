@@ -1,3 +1,4 @@
+//array contenente gli oggetti con i dati dei post
 const posts = [
     {
         "id": 1,
@@ -56,39 +57,55 @@ const posts = [
     }
 ];
 
+// creo una variabile e l'associo al container della DOM
 const containerEl = document.getElementById('container')
 
+posts.forEach((val) => {
 
-
-
-posts.forEach((val) =>{
-    //creo una condizione per il decremento del tasto like
-    val['like_condition'] = false
-    let media = val.media
-    let name = val.author.name
-   
-    let time = (rever_data(val.created))
-   console.log(time);
-    let text = val.content
-    let id = Number(val.id)
-    let image 
+    //creo e aggiundo agli oggetti dell'array una condizione per moodificare il valore  del like
+    val['like_condition'] = false;
+    //associo ad una variabile il valore della kay dell'oggetto
+    let media = val.media;
+    //associo ad una variabile il valore della kay dell'oggetto
+    let name = val.author.name;
+    //associo ad una variabile il valore della kay dell'oggetto al rovescio
+    let time = (rever_data(val.created));
+    //lo logga in console per una verifica
+    console.log(time);
+    //associo ad una variabile il valore della kay dell'oggetto
+    let text = val.content;
+    //associo ad una variabile il valore della kay dell'oggetto
+    let id = Number(val.id);
+    // creo una variabile 
+    let image;
+    // creo una condizione per associare un valore alla variabile
     if (val.author.image == null) {
-        image = img_Presolder(val.author.name)
-        
-    }else{
-        image = `<img class="profile-pic" src="${val.author.image}" alt="Phil Mangione">`
-        
-    }    
+
+        // se il valore è nulllo gli do una immagine presolder
+        image = img_Presolder(val.author.name);
+
+    } else {
+
+        //sennò associo il valore della kay dell'oggetto
+        image = `<img class="profile-pic" src="${val.author.image}" alt="Phil Mangione">`;
+
+    }
+
+    //associo ad una variabile il valore della kay dell'oggetto
     let positionPost = val.id
-    
+    //associo ad una variabile il valore della kay dell'oggetto
     let numberOfLike = val.likes
-    console.log(media,name,time,text,image,positionPost,numberOfLike);
-    containerEl.insertAdjacentElement('beforeend',generated_post(image,name,time,text,media,positionPost,numberOfLike,id))
-})        
+    //lo logga in console per una verifica
+    console.log(media, name, time, text, image, positionPost, numberOfLike);
+    //utilizzo la funzione generated_post e la inserisco allinterno del container nella DOM
+    containerEl.insertAdjacentElement('beforeend', generated_post(image, name, time, text, media, positionPost, numberOfLike, id))
+
+})
+
+//associo ad una variabile tutti i  tasti like      
 const like_button = document.querySelectorAll('.like-button');
 //lo logga in console per una verifica
 console.log(posts);
-
 //lo logga in console per una verifica
 console.log(like_button);
 
@@ -96,7 +113,7 @@ console.log(like_button);
 for (let i = 0; i < like_button.length; i++) {
 
     //sta in attesa del click del tasto selezionato dal ciclo
-    like_button[i].addEventListener('click',function () {
+    like_button[i].addEventListener('click', function () {
 
         //lo logga in console per una verifica
         console.log('click');
@@ -117,48 +134,48 @@ for (let i = 0; i < like_button.length; i++) {
         if (!posts[i].like_condition) {
 
             //uso funzione per incrementare il numero di like e dare un colore al tasto
-            increment_like(like_button,i,posts,containerNumber);
-        
-        }else {
+            increment_like(like_button, i, posts, containerNumber);
+
+        } else {
 
             //uso funzione per decrementare il numero di like e togliere colore al tasto
-            decrement_like(like_button,i,posts,containerNumber);
+            decrement_like(like_button, i, posts, containerNumber);
 
-        } 
+        }
 
         //lo logga in console per una verifica
         console.log(posts[i].likes);
 
-    })      
+    })
 }
 
 //-----------------------POST-------------------------------------------------
-function generated_post(media,name,time,text,image,positionPost,numberOfLike,id) {
-    
+function generated_post(media, name, time, text, image, positionPost, numberOfLike, id) {
+
     const post = document.createElement('div')
     post.classList.add('post')
-    post.insertAdjacentElement ('beforeend',generated_post_header(media,name,time))
-    post.insertAdjacentElement ('beforeend',generated_post_text(text))
-    post.insertAdjacentElement ('beforeend',generated_post_image(image))
-    post.insertAdjacentElement ('beforeend',generated_post_footer(positionPost,numberOfLike,id))
-    
-    
-    
+    post.insertAdjacentElement('beforeend', generated_post_header(media, name, time))
+    post.insertAdjacentElement('beforeend', generated_post_text(text))
+    post.insertAdjacentElement('beforeend', generated_post_image(image))
+    post.insertAdjacentElement('beforeend', generated_post_footer(positionPost, numberOfLike, id))
+
+
+
     return post
 }
 //------------------------POST HEADER----------------------------------------------------------
 
-function generated_post_header(media,name,time) {
+function generated_post_header(media, name, time) {
     const post_header = document.createElement('div')
     post_header.classList.add('post__header')
-    post_header.insertAdjacentElement('beforeend',generated_post_meta(media,name,time))
+    post_header.insertAdjacentElement('beforeend', generated_post_meta(media, name, time))
     return post_header
 }
-function generated_post_meta(media,name,time) {
+function generated_post_meta(media, name, time) {
     const post_meta = document.createElement('div')
     post_meta.classList.add('post-meta')
-    post_meta.insertAdjacentElement('beforeend',generated_post_meta_icon(media))
-    post_meta.insertAdjacentElement('beforeend',generated_post_meta_data(name,time))
+    post_meta.insertAdjacentElement('beforeend', generated_post_meta_icon(media))
+    post_meta.insertAdjacentElement('beforeend', generated_post_meta_data(name, time))
     return post_meta
 }
 function generated_post_meta_icon(media) {
@@ -168,10 +185,10 @@ function generated_post_meta_icon(media) {
     post_meta_icon.innerHTML = icon
     return post_meta_icon
 }
-function generated_post_meta_data(name,time) {
+function generated_post_meta_data(name, time) {
     const post_meta_data = document.createElement('div')
     post_meta_data.classList.add('post-meta__data')
-    post_meta_data.insertAdjacentElement('beforeend',generated_post_meta_data_author(name))
+    post_meta_data.insertAdjacentElement('beforeend', generated_post_meta_data_author(name))
     post_meta_data.insertAdjacentElement('beforeend', generated_post_meta_data_author(time))
     return post_meta_data
 }
@@ -203,23 +220,23 @@ function generated_post_image(image) {
     post_image.classList.add('post__image')
     const img = document.createElement('img')
     img.src = `${image}`
-    post_image.insertAdjacentElement('beforeend',img)
-    
+    post_image.insertAdjacentElement('beforeend', img)
+
     return post_image
 }
 //---------------------------POST FOOTER------------------------------------------
-function generated_post_footer(positionPost,numberOfLike,id) {
+function generated_post_footer(positionPost, numberOfLike, id) {
     const post_footer = document.createElement('div')
     post_footer.classList.add('post__footer')
-    post_footer.insertAdjacentElement('beforeend',generated_likes(positionPost,numberOfLike,id))
+    post_footer.insertAdjacentElement('beforeend', generated_likes(positionPost, numberOfLike, id))
     return post_footer
 }
 
-function generated_likes(positionPost,numberOfLike,id) {
+function generated_likes(positionPost, numberOfLike, id) {
     const post_footer_likes = document.createElement('div')
-    post_footer_likes.classList.add('likes','js-likes')
-    post_footer_likes.insertAdjacentElement('beforeend',generated_likes_cta(positionPost))
-    post_footer_likes.insertAdjacentElement('beforeend',nagenerated_likes_counter(numberOfLike,id))
+    post_footer_likes.classList.add('likes', 'js-likes')
+    post_footer_likes.insertAdjacentElement('beforeend', generated_likes_cta(positionPost))
+    post_footer_likes.insertAdjacentElement('beforeend', generated_likes_counter(numberOfLike, id))
     return post_footer_likes
 }
 
@@ -232,23 +249,25 @@ function generated_likes_cta(positionPost) {
         <span class="like-button__label">Mi Piace</span>
     </a>
     `
-    
-    post_footer_likes_cta.insertAdjacentHTML('beforeend',aEl)
+
+    post_footer_likes_cta.insertAdjacentHTML('beforeend', aEl)
     return post_footer_likes_cta
 }
 
-function nagenerated_likes_counter(numberOfLike,id) {
+function generated_likes_counter(numberOfLike, id) {
     const post_footer_likes_counter = document.createElement('div')
     post_footer_likes_counter.classList.add('likes__counter')
     post_footer_likes_counter.innerHTML = `Piace a <b id="like-counter-${id}" class="js-likes-counter">${numberOfLike}</b> persone`
     return post_footer_likes_counter
 }
+
+//---------------------------IMAGE PROFILE PRESOLDER------------------------------------------
 function get_frist_letter_of_string(stringa) {
     return stringa[0]
 }
 function get_single_word_of_string_into_array(stringa) {
     return stringa.split(' ')
-    
+
 }
 function img_Presolder(NomeUtente) {
     const Array_of_NomeUtente = get_single_word_of_string_into_array(NomeUtente)
@@ -260,29 +279,32 @@ function img_Presolder(NomeUtente) {
     return cirleDivEl
 
 }
+
+//---------------------------GENERETOR DATA RANDOM------------------------------------------
 function data_random() {
-    const anno =Math.floor(Math.random() * (2023 - 1995) ) + 1995
-    let mese =  Math.floor(Math.random() * (12 - 1) ) + 1
+    const anno = Math.floor(Math.random() * (2023 - 1995)) + 1995
+    let mese = Math.floor(Math.random() * (12 - 1)) + 1
 
-    if(mese = 1 ||  3 ||  5 ||  7 ||  8 ||  10 ||  12){
-        const giorno = Math.floor(Math.random() * (31 - 1) ) + 1
+    if (mese = 1 || 3 || 5 || 7 || 8 || 10 || 12) {
+        const giorno = Math.floor(Math.random() * (31 - 1)) + 1
         const data = `${giorno}/${mese}/${anno}`
         return data
 
-    }else if (mese = 4 || 6 || 9 || 11 ){
-        const giorno = Math.floor(Math.random() * (30 - 1) ) + 1
+    } else if (mese = 4 || 6 || 9 || 11) {
+        const giorno = Math.floor(Math.random() * (30 - 1)) + 1
         const data = `${giorno}/${mese}/${anno}`
         return data
 
-    }else{
-        const giorno = Math.floor(Math.random() * (29 - 1) ) + 1
+    } else {
+        const giorno = Math.floor(Math.random() * (29 - 1)) + 1
         const data = `${giorno}/${mese}/${anno}`
         return data
 
     }
-    
-    
+
+
 }
+//---------------------------REVER DATA USA TO ITA------------------------------------------
 /**
  * 
  * @param {string} data 
@@ -296,21 +318,21 @@ function rever_data(data) {
     console.log(deta);
     return deta
 }
-
-function increment_like(tastoLike,i,Array,elementoConNumeroLike) {
-     //aggiunge la classe blue
-     tastoLike[i].classList.add('blue')
+//---------------------------INCREMENT LIKE------------------------------------------
+function increment_like(tastoLike, i, Array, elementoConNumeroLike) {
+    //aggiunge la classe blue
+    tastoLike[i].classList.add('blue')
     //cambia il valore  di inizio condizione cosi che non si ripeta
     Array[i].like_condition = true
-     //incrementa il numero di like
-     Array[i].likes++
-     //sovrascrive il vecchio valore
-     elementoConNumeroLike.innerText = Array[i].likes
-     //lo logga in console per una verifica
-     console.log(Array[i].like_condition);
+    //incrementa il numero di like
+    Array[i].likes++
+    //sovrascrive il vecchio valore
+    elementoConNumeroLike.innerText = Array[i].likes
+    //lo logga in console per una verifica
+    console.log(Array[i].like_condition);
 }
-
-function decrement_like(tastoLike,i,Array,elementoConNumeroLike) {
+//---------------------------DECREMENT LIKE------------------------------------------
+function decrement_like(tastoLike, i, Array, elementoConNumeroLike) {
 
     //rimuovo la classe blue
     tastoLike[i].classList.remove('blue')
@@ -322,5 +344,5 @@ function decrement_like(tastoLike,i,Array,elementoConNumeroLike) {
     elementoConNumeroLike.innerText = Array[i].likes
     //lo logga in console per una verifica          
     console.log(Array[i].like_condition);
-    
+
 }
