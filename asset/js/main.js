@@ -62,6 +62,7 @@ const containerEl = document.getElementById('container')
 
 
 posts.forEach((val) =>{
+    //creo una condizione per il decremento del tasto like
     val['like_condition'] = false
     let media = val.media
     let name = val.author.name
@@ -84,37 +85,50 @@ posts.forEach((val) =>{
     console.log(media,name,time,text,image,positionPost,numberOfLike);
     containerEl.insertAdjacentElement('beforeend',generated_post(image,name,time,text,media,positionPost,numberOfLike,id))
 })        
-const like_button = document.querySelectorAll('.like-button')
+const like_button = document.querySelectorAll('.like-button');
+//lo logga in console per una verifica
 console.log(posts);
-let like_condition_dec = true
+
+//lo logga in console per una verifica
 console.log(like_button);
+
+//creo un ciclo che mi associa un indice per ogni bottone like in pagina
 for (let i = 0; i < like_button.length; i++) {
+
+    //sta in attesa del click del tasto selezionato dal ciclo
     like_button[i].addEventListener('click',function () {
+
+        //lo logga in console per una verifica
         console.log('click');
+
+        //lo logga in console per una verifica
         console.log(posts[i].likes);
-        const containerNumber = document.getElementById(`like-counter-${posts[i].id}`)
+
+        //associo ad una variabile il contenitore del numero del like
+        const containerNumber = document.getElementById(`like-counter-${posts[i].id}`);
+
+        //lo logga in console per una verifica
         console.log(containerNumber);
+
+        //lo logga in console per una verifica
         console.log(posts[i].like_condition);
 
+        //realizzo una condizione per incrementare e decrementare il valore dentro il contenitore del like
         if (!posts[i].like_condition) {
-            like_button[i].classList.add('blue')
-            posts[i].like_condition = true
-            like_condition_dec = true
 
-            posts[i].likes++
-            containerNumber.innerText = posts[i].likes
+            //uso funzione per incrementare il numero di like e dare un colore al tasto
+            increment_like(like_button,i,posts,containerNumber);
+        
+        }else {
 
-            console.log(posts[i].like_condition);
-        }else if (like_condition_dec) {
-            posts[i].likes--
-            like_button[i].classList.remove('blue')
-                like_condition_dec = false
-                posts[i].like_condition = false
-                containerNumber.innerText = posts[i].likes
-                console.log(posts[i].like_condition);
-                
+            //uso funzione per decrementare il numero di like e togliere colore al tasto
+            decrement_like(like_button,i,posts,containerNumber);
+
         } 
+
+        //lo logga in console per una verifica
         console.log(posts[i].likes);
+
     })      
 }
 
@@ -281,4 +295,32 @@ function rever_data(data) {
     let deta = reverseArrayTime.join('/')
     console.log(deta);
     return deta
+}
+
+function increment_like(tastoLike,i,Array,elementoConNumeroLike) {
+     //aggiunge la classe blue
+     tastoLike[i].classList.add('blue')
+    //cambia il valore  di inizio condizione cosi che non si ripeta
+    Array[i].like_condition = true
+     //incrementa il numero di like
+     Array[i].likes++
+     //sovrascrive il vecchio valore
+     elementoConNumeroLike.innerText = Array[i].likes
+     //lo logga in console per una verifica
+     console.log(Array[i].like_condition);
+}
+
+function decrement_like(tastoLike,i,Array,elementoConNumeroLike) {
+
+    //rimuovo la classe blue
+    tastoLike[i].classList.remove('blue')
+    //cambia il valore  di inizio condizione cosi che non si ripeta
+    Array[i].like_condition = false
+    //decremento il numero di like
+    Array[i].likes--
+    //sovrascrive il vecchio valore
+    elementoConNumeroLike.innerText = Array[i].likes
+    //lo logga in console per una verifica          
+    console.log(Array[i].like_condition);
+    
 }
